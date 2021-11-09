@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>AJAX Pilihan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="loadProvinsi()">
+    <div class="container d-flex justify-content-center">
+        <div class="w-50 card my-5">
+            <div class="card-header bg-danger">
+                <a class="btn btn-info" href="index.html">Back</a>
+            </div>
+            <div class="card-content px-5 pt-3">
+                <center>
+                <h2>Membuat Pilihan</h2>
+                </center>
+                <div class="px-3 border-top py-4 text-center">
+                    <form>
+                        <div class="mb-3" id="mySelect">
+                        <label for="province" class="form-label text-black">Provinsi</label>
+                        <select id="myProvince" class="form-select" onchange="if (this.selectedIndex) doSomething();">
+                        </select>
+                        </div>
+                        <div class="mb-3">
+                        <label for="city" class="form-label text-black">Kabupaten/Kota</label>
+                        <select id="myCity" class="form-select">
+                        </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <h5>© Dis Dias 2021</h5>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    function doSomething() {
+    var e = document.getElementById("myProvince");
+    var valueKota = e.options[e.selectedIndex].value;
+    var textKota = e.options[e.selectedIndex].text;
+     
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+    var data = JSON.parse(xhttp.responseText);
+    for (let i = 0; i < 30; i++) {
+    // console.log(data.provinsi[0].id);
+    const select = document.getElementById('myCity');
+    const value = data.kota_kabupaten[i].id
+    const label = data.kota_kabupaten[i].nama
+    select.insertAdjacentHTML('beforeend', `<option value="${value}">${label}</option>`)
+    }
+    }
+     
+     
+    };
+    xhttp.open('GET', `https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=${valueKota}`, true);
+    xhttp.send();
+    }
+     
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+    var data = JSON.parse(xhttp.responseText);
+    for (let i = 0; i < 30; i++) {
+    // console.log(data.provinsi[0].id);
+    const select = document.getElementById('myProvince');
+    const value = data.provinsi[i].id
+    const label = data.provinsi[i].nama
+    select.insertAdjacentHTML('beforeend', `<option value="${value}" >${label}</option>`)
+    }
+    // doSomething();
+    }
+     
+     
+    };
+    xhttp.open("GET", "https://dev.farizdotid.com/api/daerahindonesia/provinsi", true);
+    xhttp.send();
+</script>
+
+</html>
